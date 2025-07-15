@@ -1,0 +1,212 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>天機堂 | 奇門遁甲與術數</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .section { display: none; }
+        .section.active { display: block; }
+        .sidebar a:hover { color: #10b981; }
+        .smooth-scroll { scroll-behavior: smooth; }
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .hover-scale { transition: transform 0.3s ease; }
+        .hover-scale:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans leading-relaxed text-gray-800 smooth-scroll">
+    <header class="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-4 px-6 flex items-center justify-between shadow-lg">
+        <div class="flex items-center space-x-4">
+            <img src="https://images.unsplash.com/photo-1620283086272-29f4c773f087?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100&q=80" alt="天機堂 Logo" class="h-16 rounded-full">
+            <h1 class="text-3xl font-bold">天機堂</h1>
+        </div>
+        <nav class="hidden md:flex space-x-4">
+            <a href="#contact" onclick="showSection('contact')" class="text-white hover:text-green-300 transition">聯絡我們</a>
+            <a href="#news" onclick="showSection('news')" class="text-white hover:text-green-300 transition">最新動態</a>
+        </nav>
+    </header>
+
+    <div class="container mx-auto px-4 py-8 flex flex-col md:flex-row gap-6">
+        <aside class="md:w-1/4 bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold text-green-600 border-b-2 border-green-200 pb-2 mb-4">天機簡介</h3>
+            <ul class="space-y-2">
+                <li><a href="#intro" onclick="showSection('intro')" class="text-gray-700 hover:text-green-600 transition"><i class="fas fa-home mr-2"></i>天機簡介</a></li>
+                <li><a href="#lineage" onclick="showSection('lineage')" class="text-gray-700 hover:text-green-600 transition"><i class="fas fa-scroll mr-2"></i>師門承傳</a></li>
+                <li><a href="#scope" onclick="showSection('scope')" class="text-gray-700 hover:text-green-600 transition"><i class="fas fa-briefcase mr-2"></i>業務範疇</a></li>
+                <ul class="ml-4 space-y-1">
+                    <li><a href="#fortune" onclick="showSection('fortune')" class="text-gray-600 hover:text-green-600 transition"><i class="fas fa-star mr-2"></i>算命</a></li>
+                    <li><a href="#divination" onclick="showSection('divination')" class="text-gray-600 hover:text-green-600 transition"><i class="fas fa-magic mr-2"></i>占卜問卦</a></li>
+                    <li><a href="#fengshui" onclick="showSection('fengshui')" class="text-gray-600 hover:text-green-600 transition"><i class="fas fa-mountain mr-2"></i>風水</a></li>
+                    <li><a href="#naming" onclick="showSection('naming')" class="text-gray-600 hover:text-green-600 transition"><i class="fas fa-pen mr-2"></i>改名</a></li>
+                    <li><a href="#dateSelection" onclick="showSection('dateSelection')" class="text-gray-600 American Gothic mr-2"></i>擇日</a></li>
+                </ul>
+                <li><a href="#pricing" onclick="showSection('pricing')" class="text-gray-700 hover:text-green-600 transition"><i class="fas fa-dollar-sign mr-2"></i>收費一覽</a></li>
+                <li><a href="#cases" onclick="showSection('cases')" class="text-gray-700 hover:text-green-600 transition"><i class="fas fa-book-open mr-2"></i>個案分享</a></li>
+                <li><a href="#news" onclick="showSection('news')" class="text-gray-700 hover:text-green-600 transition"><i class="fas fa-newspaper mr-2"></i>最新動態</a></li>
+                <li><a href="#contact" onclick="showSection('contact')" class="text-gray-700 hover:text-green-600 transition"><i class="fas fa-envelope mr-2"></i>聯絡方法</a></li>
+            </ul>
+        </aside>
+
+        <main class="md:w-3/4 bg-white p-8 rounded-lg shadow-md">
+            <section id="intro" class="section active fade-in">
+                <img src="https://images.unsplash.com/photo-1508247967583-7d982ea01526?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Introduction Image" class="w-full h-64 object-cover rounded-lg mb-6 hover-scale">
+                <h2 class="text-2xl font-bold text-green-600 mb-4">天機簡介</h2>
+                <p class="text-gray-700">自小不相信風水命理，星移斗轉會為人和事帶來影響，不相信於家裏某方位擺放一杯水便會轉好運！放洋留學攻讀電腦工程，更覺風水命理只為江湖騙術！然而一次偶然下接觸奇門遁甲，不需問事人之時辰八字卻可知其人之事並且非常準確，心感驚訝亦十分好奇；於是到處訪尋奇門名師，希望得知當中究竟！機緣下跟隨恩師學習奇門遁甲！研習三數月，已能準確預測親友發生何事！經用心鑽研，深切體會奇門遁甲之奧秘！當中每個秘法均有根有據不能自創！奇門亦可貫通其他術數同步運用，並非一加一等於二，其中數理間之撞擊結果，就如化學作用變化無窮！幸得恩師收為徒弟繼續深入鑽研琴堂派各科術數，如古三式、陰陽宅風水、算命、擇日、趨姻緣、財運、健康等秘傳法門！明白風水命理一招一式皆為時間空間之因果並非江湖騙術！且能助人趨吉避凶，積德積福！經過十多二十年來經驗累積教授徒弟，對因果感受非常深，真正術數本是宇宙定律不可超越。有德有術者可將運程改變，但有因有果要找數。只要做人積極正面努力向上多做善事，即福即德自然事事順利！</p>
+                <p class="text-gray-700 mt-4">
+                    古術數《琴堂派》傳人<br>
+                    20年奇門遁甲經驗<br>
+                    曾習易學、太乙神數、大六壬、子平八字、紫微斗數、風水學、姓名學<br>
+                    慈善團體天機堂創辦人<br>
+                    中華玄學學會會長<br>
+                    香港易道文化研究會榮譽會長<br>
+                    壬辰年全球算命師比賽冠軍<br>
+                    乙未年全球算命師比賽季軍<br>
+                    弟子近二百人<br>
+                    多間國際企業作常任玄學風水顧問<br>
+                    我第十屆徒弟Renee 在全球算命比賽中脫穎而出奪冠軍
+                </p>
+            </section>
+
+            <section id="lineage" class="section fade-in">
+                <img src="https://images.unsplash.com/photo-1506748689000-6862577b9e11?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Lineage Image" class="w-full h-64 object-cover rounded-lg mb-6 hover-scale">
+                <h2 class="text-2xl font-bold text-green-600 mb-4">師門承傳</h2>
+                <p class="text-gray-700">琴堂派之歷史可追溯自漢朝，祖先師為朝廷欽天監（為皇帝觀察天文，制歷法，擇日占卦之官位）！因職之便，博覧宮中秘典，將各術數及古三式融會員通，卻因朝廷黑暗未有張揚！及後朝中爭鬥，祖先師稱因病還鄉而可保未受加害！於鄉間隱世行醫，有緣遇謙厚聰慧之人，將三式傳授，望三式絕學得以傳承。祖師格言：「寧可失傳，不可妄傳。」我派千年以來將各科術數去蕪存菁，將核心部份加以鑽研，並將古法術數之精萃擇人而授，代代相傳！所以並非自學或上修三幾課堂可比！在此感謝恩師收我為徒，並肯定本人之人品道德有義及確認本人為琴堂派承傳門人！</p>
+                <p class="text-gray-700 mt-4">有緣拜入琴堂派邵問津大師門下學習奇門遁甲及古三式，盡得真傳，尤其奇門遁甲特別精進。往後跟10多位老師學習風水，得到各派所長，尤其最後一位康師父帶我進入另一個風水境界，之前10多位老師未能圓滿解釋的問題，在康師父學習過程中得到完美答案，深明風水的核心所在。現在弟子近200人，約有10位已經開班授徒，將珍貴學問薪火相傳得以傳承。</p>
+            </section>
+
+            <section id="scope" class="section fade-in">
+                <img src="https://images.unsplash.com/photo-1516321310766-47f7f7df2b02?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Scope Image" class="w-full h-64 object-cover rounded-lg mb-6 hover-scale">
+                <h2 class="text-2xl font-bold text-green-600 mb-4">業務範疇</h2>
+                <p class="text-gray-700">提供全方位玄學服務，包括算命、占卜問卦、風水、改名及擇日。</p>
+            </section>
+
+            <section id="fortune" class="section fade-in">
+                <img src="https://images.unsplash.com/photo-1509228468518-1355b0a4b2f7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Fortune Image" class="w-full h-64 object-cover rounded-lg mb-6 hover-scale">
+                <h2 class="text-2xl font-bold text-green-600 mb-4">算命</h2>
+                <p class="text-gray-700">如命運是註定那又何須算命？註定三十歲前結婚會離婚，你可會三十前結婚？註定大運裏與友合作生意會因財失義人財兩空，你會否與友合資？算命最大目的是趨吉避凶，算得大方向便可從細微處著手跟進！算命離不開姻緣、事業、子嗣、官司、病災。根據準確之時辰八字，以上所提大都可以準確地計算出發生之時間及結果。有德之算命師在算命前，一定會為客人對出正確之時辰八字。就算客人所提供之八字為醫院所發出亦未必準確，因嬰兒出生後清潔、紀錄、檢查亦需時，誤差五分鐘可能已到另一時辰！所以對準時辰於算命時十分重要！紫微斗數與八字是現行最主要兩大算命系統：紫微斗數最先記載於道藏經，再於宋朝為人所認識，由一百一拾䦉顆星曜，依規律排於十二宮宮垣！經由命主命盤中的星曜推演出吉凶禍福及流年運勢等。由於十二宮垣互相影響，所以小星曜對主星之影響頗大，因此斗數可作出相當細微及準確之批斷！細緻可斷自身、父母、上司、內心思想情緒、家及公司內情況、工作讀書、同事下屬、旅遊移民、病災血光、正財橫財、子女、姻緣伴侶、兄弟朋友、官司等。至於八字，是指每個人出生之年月日時，已可斷出一生六親、財庫、姻緣、健康、子女、心性等。何時行運何時倒霉八字一眼看出，一門很直接的算命系統！坊間有人只論身強弱、只論寒熱命，這實為八字其中一部份而已，以偏概全實為可惜！我派古法八字代代傳承，將千年經驗擇人而授，當中有多訣不外傳！</p>
+            </section>
+
+            <section id="divination" class="section fade-in">
+                <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Divination Image" class="w-full h-64 object-cover rounded-lg mb-6 hover-scale">
+                <h2 class="text-2xl font-bold text-green-600 mb-4">占卜問卦</h2>
+                <p class="text-gray-700">奇門遁甲為古三式之一，古代預測術中「奇門遁甲」稱為帝王之術，只有行軍將領及國家重臣才可學習！古時用作戰爭打仗之預測工具，準確度極高，所以民間不得學習傳授，只於朝廷大官間流傳！流傳到現今坊間對「奇門遁甲」認識不多，能夠精通奇門並純熟運用的師父更少之又少！何謂奇門遁甲？實為「時」及「空」對應模型！無需生辰八字可知問事人近況、工作、上司、下屬、感情、伴侶、第三者、子女、父母、經濟情況、病因醫治、生意合作、家中發生何事、預測家中風水等等，亦可一一斷出！更可預測事情發展及結果！我派奇門遁甲承傳千年，準確度之高，令人驚訝！當中師門承傳之多門秘法，救人助人不計其數！奇門遁甲亦可同時配合任何術數一同使用如奇門八字、奇門斗數、奇門風水、而「奇門穿壬」較為人認識。六壬神課亦為古三式之一，與「奇門遁甲」同稱帝王之術！最早記載於春秋時期「越絕書」。奇門重時空地理，六壬重於人和，能將人與人及人與事之關係分析得很細緻。由於六壬神課起盤復雜，解課時所用刑沖破害、十二長生、神煞等，所以斷事時角度較寬及深入！寄然與奇門齊名，六壬所占斷之事跟也不相百仲，尤其與人有關之事所斷更深入細緻！</p>
+            </section>
+
+            <section id="fengshui" class="section fade-in">
+                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Feng Shui Image" class="w-full h-64 object-cover rounded-lg mb-6 hover-scale">
+                <h2 class="text-2xl font-bold text-green-600 mb-4">風水</h2>
+                <p class="text-gray-700">奇門風水-完整一套風水：【格局 坐向 理氣】 缺一不可結合形家、納氣、金鎖、玄空飛星及奇門遁甲！形家-風水首先要論格局，納氣-元運坐向，金鎖-廿四山吉凶，奇門重時空-理氣之根本！奇門風水除了能夠提升宅運外，亦能針對財運，求子嗣、催旺文昌讀書運、姻緣、化解野桃花、健康，作出操作！家居風水一間風水好的住宅首先可使情緒長期穩定，繼而改善你的運程。但一間風水差的住宅，使情緒長期不穩定外，嚴重還可能使人產生幻覺及嚴重疾病，所以風水對人之影響可以很大！在購買物業前必須了解該宅風水是好是壞。由室外環境、室內佈局至玄空飛星，需要專業判斷，才可肯定物業能否助夫妻感情、工作、財運、孩子讀書、一家健康等！如已遷進住宅，用奇門風水亦可趨吉避凶，即趨財、姻緣、文昌、趨丁、事業、保健康，避開病災將其洩之！加上奇門風水秘法，將風水力量以幾何級數引發！商鋪風水生意經商當然要生意興隆，財源廣進！選擇鋪位及辨工室當然重要，內裏格局亦不可忽視！老闆安坐財位，上下齊心、營業同事桃花旺，理所當然！奇門風水亦能針對以上各點，用形家及玄空佈「發財局」外，加上奇門風水秘法，將風水趨財力量以幾何級數引發！陰宅風水陰宅與陽宅風水分別很大，因陽宅風水好與壞，只會影響住在陽宅的人。但陰宅風水影響的是一族人，少則數十人多則千人！所以陰宅影響非常大，如尋得一風水寶穴落葬，福蔭後人，子孫得福，務必認真處理！</p>
+            </section>
+
+            <section id="naming" class="section fade-in">
+                <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Naming Image" class="w-full h-64 object-cover rounded-lg mb-6 hover-scale">
+                <h2 class="text-2xl font-bold text-green-600 mb-4">改名</h2>
+                <p class="text-gray-700">姓名每人出生都有一個時間即八字，而每個八字都有喜忌！喜忌即八字喜用及忌用之五行！姓名就可補八字不足而增運！如命格喜水，名字會加入金水元素使命主有幫扶！如小朋友成長後性格溫文，但名叫「曹操」又格格不入！公司寶號公司命名規範較多，因各行各業皆有其五行屬性，而公司東主亦有五行喜忌，營業項目，顧客年齡階層。要避凶，趨吉，事事吉祥，才可生意興隆。除五行元素外亦要加入行銷概念，讓公司名字於行業有代表性及讓客人第一次產生深刻印象！電話號碼想想上一次是誰叫你中文全名？當你的姓名沒有使用，助力便會減少。今時今日電話號碼WhatsApp逐漸代替你的姓名，電話號碼絕對影響你情緒、工作、財運、健康、感情。有別於坊間的一套已經數字我用的一套電話號碼是有根有據的玄空系統。</p>
+            </section>
+
+            <section id="dateSelection" class="section fade-in">
+                <img src="https://images.unsplash.com/photo-1509514026778-4facb8e76687?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Date Selection Image" class="w-full h-64 object-cover rounded-lg mb-6 hover-scale">
+                <h2 class="text-2xl font-bold text-green-600 mb-4">擇日</h2>
+                <p class="text-gray-700">現時絕大部份人用通勝擇日，即「董公擇日法」！打開通勝，尋得「天乙貴人吉」就算擇日！但有多吉？如何吉？男好女好？仔好老豆好？財同健康又好唔好？好官職？好文昌？桃花又好唔好？好幾耐？點好法？用通勝，根本沒有答案。很多人甚至很多師父，都有著錯誤的擇日概念！擇了吉日吉時就是好，百事皆順？擇日主要的作用是什麼？人生大事需要擇日，不單為了事情順利，還要利用大事發生之時日，從而改運及增加運勢！如婚嫁大事，擇得吉時，能滙集群眾為一對新人送上祝福，集眾人之福，加上時間、空間之五行力量，好的能量便能全收！當中更可將此能量變做財運、子女運、恩愛運！如動土，大如大廈動奠基，小如家裏裝修亦要當心！動土能量很大，如果對面地盤剛起樓，住在大廈1-10樓的鄰居則多病痛多破財！小則自己家裏裝修，若可通過奇門擇日將此負能量變做財運，你會用奇門擇日嗎？</p>
+            </section>
+
+            <section id="pricing" class="section fade-in">
+                <img src="https://images.unsplash.com/photo-1554224155-8d04cb21a1c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Pricing Image" class="w-full h-64 object-cover rounded-lg mb-6 hover-scale">
+                <h2 class="text-2xl font-bold text-green-600 mb-4">收費一覽</h2>
+                <p class="text-gray-700">詳細收費請參閱官方網站或聯絡我們查詢。</p>
+            </section>
+
+            <section id="cases" class="section fade-in">
+                <img src="https://images.unsplash.com/photo-1516321310766-47f7f7df2b02?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Cases Image" class="w-full h-64 object-cover rounded-lg mb-6 hover-scale">
+                <h2 class="text-2xl font-bold text-green-600 mb-4">個案分享</h2>
+                <p class="text-gray-700">真實個案，印證奇門遁甲與風水命理的精準與實效。</p>
+            </section>
+
+            <section id="news" class="section fade-in">
+                <img src="https://images.unsplash.com/photo-1504711434969-e26cc8d9d371?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="News Image" class="w-full h-64 object-cover rounded-lg mb-6 hover-scale">
+                <h2 class="text-2xl font-bold text-green-600 mb-4">最新動態</h2>
+                <p class="text-gray-700">敬請關注我們的Facebook與Instagram，獲取最新消息與課程資訊。</p>
+            </section>
+
+            <section id="contact" class="section fade-in">
+                <img src="https://images.unsplash.com/photo-1516321497487-e288fb19713f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Contact Image" class="w-full h-64 object-cover rounded-lg mb-6 hover-scale">
+                <h2 class="text-2xl font-bold text-green-600 mb-4">聯絡我們</h2>
+                <p class="text-gray-700">電話 / Whatsapp：香港 9699 8608 | 澳洲 +61 40877 8827</p>
+                <p class="text-gray-700">電郵：masterkinglee@gmail.com</p>
+                <p class="text-gray-700">地址：觀塘開源道 54 號豐利中心 1702 室</p>
+                <p class="text-gray-700">Facebook：<a href="https://www.facebook.com/share/1ENEm6coFh/" class="text-green-600 hover:underline">奇門天機</a></p>
+                <p class="text-gray-700">IG：<a href="https://www.instagram.com/master_kinglee" class="text-green-600 hover:underline">@master_kinglee</a></p>
+                <p class="text-gray-700">網址：<a href="http://www.tinkei.com.hk" class="text-green-600 hover:underline">www.tinkei.com.hk</a></p>
+            </section>
+        </main>
+    </div>
+
+    <footer class="bg-gray-800 text-white text-center py-6">
+        <p>Copyright © 2025 天機堂 TinKei</p>
+        <div class="mt-2">
+            <a href="https://www.facebook.com/share/1ENEm6coFh/" class="text-green-300 hover:text-green-400 mx-2"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/master_kinglee" class="text-green-300 hover:text-green-400 mx-2"><i class="fab fa-instagram"></i></a>
+        </div>
+    </footer>
+
+    <script>
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active', 'fade-in');
+            });
+            const targetSection = document.getElementById(id);
+            targetSection.classList.add('active', 'fade-in');
+            window.scrollTo({ top: targetSection.offsetTop - 100, behavior: 'smooth' });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showSection('intro');
+        });
+    </script>
+</body>
+</html>
