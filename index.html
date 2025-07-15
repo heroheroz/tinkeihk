@@ -18,7 +18,17 @@
         }
         .hover-scale { transition: transform 0.3s ease; }
         .hover-scale:hover { transform: scale(1.05); }
+        .full-face-img {
+            width: 100%;
+            height: auto;
+            max-height: 400px; /* Adjust this value to ensure the full face is visible */
+            object-fit: contain; /* Ensures the image maintains aspect ratio and shows fully */
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
     </style>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="bg-gray-50 font-sans leading-relaxed text-gray-800 smooth-scroll">
     <header class="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-4 px-6 flex items-center justify-between shadow-lg">
@@ -54,8 +64,8 @@
         </aside>
 
         <main class="md:w-3/4 bg-white p-8 rounded-lg shadow-md">
-            <img src="img/sifu.jpg" alt="Sifu Photo" class="w-full h-64 object-cover rounded-lg mb-6 hover-scale">
             <section id="intro" class="section active fade-in">
+                <img src="img/sifu.jpg" alt="Sifu Photo" class="full-face-img hover-scale">
                 <h2 class="text-2xl font-bold text-green-600 mb-4">天機簡介</h2>
                 <p class="text-gray-700">自小不相信風水命理，星移斗轉會為人和事帶來影響，不相信於家裏某方位擺放一杯水便會轉好運！放洋留學攻讀電腦工程，更覺風水命理只為江湖騙術！然而一次偶然下接觸奇門遁甲，不需問事人之時辰八字卻可知其人之事並且非常準確，心感驚訝亦十分好奇；於是到處訪尋奇門名師，希望得知當中究竟！機緣下跟隨恩師學習奇門遁甲！研習三數月，已能準確預測親友發生何事！經用心鑽研，深切體會奇門遁甲之奧秘！當中每個秘法均有根有據不能自創！奇門亦可貫通其他術數同步運用，並非一加一等於二，其中數理間之撞擊結果，就如化學作用變化無窮！幸得恩師收為徒弟繼續深入鑽研琴堂派各科術數，如古三式、陰陽宅風水、算命、擇日、趨姻緣、財運、健康等秘傳法門！明白風水命理一招一式皆為時間空間之因果並非江湖騙術！且能助人趨吉避凶，積德積福！經過十多二十年來經驗累積教授徒弟，對因果感受非常深，真正術數本是宇宙定律不可超越。有德有術者可將運程改變，但有因有果要找數。只要做人積極正面努力向上多做善事，即福即德自然事事順利！</p>
                 <p class="text-gray-700 mt-4">
@@ -74,14 +84,13 @@
             </section>
 
             <section id="lineage" class="section fade-in">
-                <img src="img/group.jpg" alt="Group Photo" class="w-full h-64 object-cover rounded-lg mb-6 hover-scale">
+                <img src="img/group.jpg" alt="Group Photo" class="full-face-img hover-scale">
                 <h2 class="text-2xl font-bold text-green-600 mb-4">師門承傳</h2>
-                <p class="text-gray-700">琴堂派之歷史可追溯自漢朝，祖先師為朝廷欽天監（為皇帝觀察天文，制歷法，擇日占卦之官位）！因職之便，博覧宮中秘典，將各術數及古三式融會員通，卻因朝廷黑暗未有張揚！及後朝中爭鬥，祖先師稱因病還鄉而可保未受加害！於鄉間隱世行醫，有緣遇謙厚聰慧之人，將三式傳授，望三式絕學得以傳承。祖師格言：「寧可失傳，不可妄傳。」我派千年以來將各科術數去蕪存菁，將核心部份加以鑽研，並將古法術數之精萃擇人而授，代代相傳！所以並非自學或上修三幾課堂可比！在此感謝恩師收我為徒，並肯定本人之人品道德有義及確認本人為琴堂派承傳門人！</p>
+                <p class="text-gray-700">琴堂派之歷史可追溯自漢朝，祖先師為朝廷欽天監（為皇帝觀察天文，制歷法，擇日占卦之官位）！因職之便，博覽宮中秘典，將各術數及古三式融會貫通，卻因朝廷黑暗未有張揚！及後朝中爭鬥，祖先師稱因病還鄉而可保未受加害！於鄉間隱世行醫，有緣遇謙厚聰慧之人，將三式傳授，望三式絕學得以傳承。祖師格言：「寧可失傳，不可妄傳。」我派千年以來將各科術數去蕪存菁，將核心部份加以鑽研，並將古法術數之精萃擇人而授，代代相傳！所以並非自學或上修三幾課堂可比！在此感謝恩師收我為徒，並肯定本人之人品道德有義及確認本人為琴堂派承傳門人！</p>
                 <p class="text-gray-700 mt-4">有緣拜入琴堂派邵問津大師門下學習奇門遁甲及古三式，盡得真傳，尤其奇門遁甲特別精進。往後跟10多位老師學習風水，得到各派所長，尤其最後一位康師父帶我進入另一個風水境界，之前10多位老師未能圓滿解釋的問題，在康師父學習過程中得到完美答案，深明風水的核心所在。現在弟子近200人，約有10位已經開班授徒，將珍貴學問薪火相傳得以傳承。</p>
             </section>
 
             <section id="scope" class="section fade-in">
-                <img src="img/jc.jpg" alt="JC Photo" class="w-full h-64 object-cover rounded-lg mb-6 hover-scale">
                 <h2 class="text-2xl font-bold text-green-600 mb-4">業務範疇</h2>
                 <p class="text-gray-700">提供全方位玄學服務，包括算命、占卜問卦、風水、改名及擇日。</p>
             </section>
