@@ -21,11 +21,27 @@
         .full-face-img {
             width: 100%;
             height: auto;
-            max-height: 400px; /* Adjust this value to ensure the full face is visible */
-            object-fit: contain; /* Ensures the image maintains aspect ratio and shows fully */
+            max-height: 400px;
+            object-fit: contain;
             border: 1px solid #ddd;
             border-radius: 5px;
             margin-bottom: 15px;
+        }
+        .subpage {
+            display: none;
+            width: 100%;
+            height: 600px; /* Adjustable height for iframe */
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+        .subpage.active {
+            display: block;
+        }
+        @media (max-width: 768px) {
+            .subpage {
+                height: 400px; /* Reduced height for mobile */
+            }
         }
     </style>
     <link rel="stylesheet" href="css/styles.css">
@@ -135,6 +151,10 @@
                 <p class="text-gray-700">敬請關注我們的Facebook與Instagram，獲取最新消息與課程資訊。</p>
             </section>
 
+            <section id="news-subpage" class="subpage">
+                <iframe src="https://www.facebook.com/TinKeiKing" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+            </section>
+
             <section id="contact" class="section fade-in">
                 <h2 class="text-2xl font-bold text-green-600 mb-4">聯絡我們</h2>
                 <p class="text-gray-700">電話 / Whatsapp：香港 9699 8608 | 澳洲 +61 40877 8827</p>
@@ -199,9 +219,20 @@
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active', 'fade-in');
             });
+            document.querySelectorAll('.subpage').forEach(subpage => {
+                subpage.classList.remove('active');
+            });
             const targetSection = document.getElementById(id);
-            targetSection.classList.add('active', 'fade-in');
-            window.scrollTo({ top: targetSection.offsetTop - 100, behavior: 'smooth' });
+            if (targetSection) {
+                targetSection.classList.add('active', 'fade-in');
+            }
+            if (id === 'news') {
+                const newsSubpage = document.getElementById('news-subpage');
+                if (newsSubpage) {
+                    newsSubpage.classList.add('active');
+                }
+            }
+            window.scrollTo({ top: targetSection ? targetSection.offsetTop - 100 : 0, behavior: 'smooth' });
         }
 
         document.addEventListener('DOMContentLoaded', () => {
