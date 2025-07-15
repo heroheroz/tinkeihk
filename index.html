@@ -30,17 +30,28 @@
         .subpage {
             display: none;
             width: 100%;
-            height: 600px; /* Adjustable height for iframe */
+            height: 200px; /* Adjusted height for link placeholder */
             border: 1px solid #ddd;
             border-radius: 5px;
             margin-top: 15px;
+            text-align: center;
+            padding: 20px;
+            background-color: #f9f9f9;
         }
         .subpage.active {
             display: block;
         }
+        .subpage a {
+            color: #10b981;
+            text-decoration: none;
+            font-size: 1.2em;
+        }
+        .subpage a:hover {
+            text-decoration: underline;
+        }
         @media (max-width: 768px) {
             .subpage {
-                height: 400px; /* Reduced height for mobile */
+                height: 150px; /* Reduced height for mobile */
             }
         }
     </style>
@@ -152,7 +163,7 @@
             </section>
 
             <section id="news-subpage" class="subpage">
-                <iframe src="https://www.facebook.com/TinKeiKing" width="100%" height="100%" frameborder="0" allowfullscreen></iframe>
+                <p>查看最新動態，請點擊：<a href="https://www.facebook.com/TinKeiKing" target="_blank">天機堂 Facebook</a></p>
             </section>
 
             <section id="contact" class="section fade-in">
